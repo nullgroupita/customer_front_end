@@ -1,6 +1,14 @@
+import api from '../api'
 
-// import api from '../api/index'
-
-const actions = {
+const login = (context, params) => {
+    api.login(params)
 }
-export default actions
+
+const register = (context, params) => {
+    api.register(params)
+}
+
+export default {
+    login,
+    register
+}
