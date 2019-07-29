@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import Home from '../views/Home'
-import CreateOrder from '../components/CreateOrder'
+import CreateOrder from '../components/orders/CreateOrder'
+import LIstOrder from '../components/orders/ListOrder'
 
 Vue.use(Router)
 
@@ -27,6 +28,10 @@ export default new Router({
         {
           path: '/create-order',
           component: CreateOrder
+        },
+        {
+          path: '/list-order',
+          component: LIstOrder
         }
       ]
     },
