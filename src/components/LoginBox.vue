@@ -13,27 +13,26 @@
 </template>
 
 <script>
-import md5 from 'js-md5';
+import md5 from 'js-md5'
 export default {
-  data() {
+  data () {
     return {
       username: '',
       password: '',
-      passwordErrorMessage: '',
+      passwordErrorMessage: ''
     }
   },
   methods: {
-    login() {
-      if (this.password.length != 0) {
+    login () {
+      if (this.password.length !== 0) {
         this.$store.dispatch('login', {
           userName: this.username,
           password: md5(this.password)
         })
       } else {
-        this.passwordErrorMessage = "请输入密码"
+        this.passwordErrorMessage = '请输入密码'
       }
-
     }
-  },
+  }
 }
 </script>

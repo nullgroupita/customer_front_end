@@ -1,6 +1,6 @@
 <template>
   <div>
-    <OrderInfo v-for="item in orders" :data="item" />
+    <OrderInfo v-for="item in orders" :data="item" :key="item.id"/>
   </div>
 </template>
 

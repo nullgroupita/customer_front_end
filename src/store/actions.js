@@ -25,5 +25,5 @@ export default {
   register,
   getCustomerData,
   getOrdersByStatus,
-  createOrder,
+  createOrder
 }

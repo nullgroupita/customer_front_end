@@ -3,7 +3,7 @@ const state = {
   token: '',
   finishedOrder: [],
   unFinishOrder: [],
-  currentOrder: '',
+  currentOrder: ''
 }
 
 export default state

@@ -53,6 +53,6 @@ export default new Router({
           component: AboutMe
         }
       ]
-    },
+    }
   ]
 })

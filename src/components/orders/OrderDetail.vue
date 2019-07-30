@@ -37,41 +37,41 @@
 </template>
 
 <script>
-  import moment from "moment"
-  export default {
-    data() {
-      return {
-        STATUS_TYPE: {
-          0: '停车未接单',
-          1: '停车已结单',
-          2: '已被取车',
-          3: '取车未接单',
-          4: '取车被接单',
-          5: '已从停车场取车',
-          6: '已还车',
-          7: '完成'
-        },
-        order: '',
-      }
+import moment from 'moment'
+export default {
+  data () {
+    return {
+      STATUS_TYPE: {
+        0: '停车未接单',
+        1: '停车已接单',
+        2: '已被取车',
+        3: '取车未接单',
+        4: '取车被接单',
+        5: '已从停车场取车',
+        6: '已还车',
+        7: '完成'
+      },
+      order: ''
+    }
+  },
+  methods: {
+    getBoyName (boy) {
+      return boy != null ? boy.name : '未知'
     },
-    methods: {
-      getBoyName(boy) {
-        return boy != null ? boy.name : '未知'
-      },
-      getTime(time) {
-        return moment.unix(time).format('YYYY-MM-DD')
-      },
-      getParkingLotName(parkingLot) {
-        return parkingLot != null ? parkingLot.position : '未知'
-      },
-      getStatus(status) {
-        return this.STATUS_TYPE['' + status]
-      },
+    getTime (time) {
+      return moment.unix(time).format('YYYY-MM-DD')
     },
-    mounted() {
-      this.order = this.$store.state.currentOrder
+    getParkingLotName (parkingLot) {
+      return parkingLot != null ? parkingLot.position : '未知'
     },
+    getStatus (status) {
+      return this.STATUS_TYPE['' + status]
+    }
+  },
+  mounted () {
+    this.order = this.$store.state.currentOrder
   }
+}
 
 </script>
 

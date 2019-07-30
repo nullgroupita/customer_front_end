@@ -1,5 +1,4 @@
 import axios from 'axios'
-import cookies from 'vue-cookies'
 import store from '../store'
 
 axios.defaults.baseURL = 'http://18.179.142.236:9000/customers/'
