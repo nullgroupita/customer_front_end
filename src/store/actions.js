@@ -20,10 +20,15 @@ const getOrdersByStatus = (context, params) => {
   api.getOrdersByStatus(params)
 }
 
+const finishOrder = (context, params) => {
+  api.finishOrder(params)
+}
+
 export default {
   login,
   register,
   getCustomerData,
   getOrdersByStatus,
-  createOrder
+  createOrder,
+  finishOrder
 }

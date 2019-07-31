@@ -31,7 +31,7 @@ const register = params => {
           duration: 1000,
           background: '#1989fa'
         })
-        router.push('/home')
+        router.push('/login')
       } else {
         Notify('未知错误')
       }
@@ -51,44 +51,72 @@ const getCustomerData = () => {
     })
 }
 
-const createOrder = params => {
-  const url = store.state.customerId + '/orders'
-  axios.post(url, params)
-    .then(res => {
-      if (res.retCode === 200) {
-        Notify({
-          message: '下单成功',
-          duration: 1000,
-          background: '#1989fa'
-        })
-        router.push('/list-order')
-      } else {
-        Notify('您有未完成的订单，无法下单')
-      }
+// const createOrder = params => {
+//   const url = store.state.customerId + '/orders'
+//   axios.post(url, params)
+//     .then(res => {
+//       if (res.retCode === 200) {
+//         Notify({
+//           message: '下单成功',
+//           duration: 1000,
+//           background: '#1989fa'
+//         })
+//         router.push('/list-order')
+//       } else {
+//         Notify('您有未完成的订单，无法下单')
+//       }
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+// }
+
+const createOrder = async params => {
+  try {
+    const url = store.state.customerId + '/orders'
+    const res = await axios.post(url, params)
+    return new Promise((resolve) => {
+      resolve(res)
     })
-    .catch(err => {
-      console.log(err)
-    })
+  } catch (err) {
+    console.log(err)
+  }
 }
 
-const getOrdersByStatus = params => {
-  const url = store.state.customerId + '/orders?isFinish=' + params
-  axios.get(url)
-    .then(res => {
-      if (res.retCode === 200) {
-        if (params === 'true') {
-          store.commit('addFinishedOrders', res.data)
-        } else {
-          store.commit('addUnFinishedOrders', res.data)
-        }
-        router.push('/home')
-      } else {
-        Notify('未知错误')
-      }
+const getPrice = async params => {
+  try {
+    const url = '/orders/price?parkingTime=' + params.parkingTime + '&fetchingTime=' + params.fetchingTime
+    const res = await axios.get(url)
+    return new Promise((resolve) => {
+      resolve(res)
     })
-    .catch(err => {
-      console.log(err)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const getOrdersByStatus = async params => {
+  try {
+    const url = store.state.customerId + '/orders?isFinish=' + params
+    const res = await axios.get(url)
+    return new Promise((resolve) => {
+      resolve(res)
     })
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const finishOrder = async params => {
+  try {
+    const url = store.state.customerId + '/orders/' + store.state.currentOrder.id
+    const res = await axios.patch(url, params)
+    return new Promise((resolve) => {
+      resolve(res)
+    })
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 export default {
@@ -96,5 +124,7 @@ export default {
   register,
   getCustomerData,
   createOrder,
-  getOrdersByStatus
+  getOrdersByStatus,
+  getPrice,
+  finishOrder
 }

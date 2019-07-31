@@ -3,7 +3,7 @@
     <div>
       <img src="../../assets/car.png" />
       <span>{{order.carNumber}}</span>
-      <span style="float: right;">{{getStatus(order.status)}}</span>
+      <span class="status">{{getStatus(order.status)}}</span>
     </div>
     <div>
       <img src="../../assets/person.png" />
@@ -29,15 +29,20 @@
       <img src="../../assets/p.png" />
       <p style="display: inline; height: 80%">{{getParkingLotName(order.parkingLot)}}</p>
     </div>
+    <div>
+      <img src="../../assets/money.png" />
+      <span>{{order.price}}</span>
+    </div>
 
-    <div style="text-align: center; margin-top: 30px">
-      <van-button type="info" v-if="order.status === 7">确认</van-button>
+    <div class="button-box">
+      <van-button type="info" :disabled=disabled v-if="order.status === 5 || order.status === 6" @click='finishOrder()'>{{buttonMessage}}</van-button>
     </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment'
+import api from '../../api'
 export default {
   data () {
     return {
@@ -51,7 +56,9 @@ export default {
         6: '已还车',
         7: '完成'
       },
-      order: ''
+      order: '',
+      buttonMessage: '完成订单',
+      disabled: false
     }
   },
   methods: {
@@ -66,6 +73,18 @@ export default {
     },
     getStatus (status) {
       return this.STATUS_TYPE['' + status]
+    },
+    async finishOrder () {
+      const res = await api.finishOrder({
+        ordersId: this.order.id,
+        status: 7
+      })
+      if (res.retCode === 200) {
+        this.$notify('已完成订单')
+        this.$route.push('/list-order')
+      } else {
+        this.$notify('网络错误')
+      }
     }
   },
   mounted () {
@@ -87,8 +106,8 @@ export default {
   }
 
   img {
-    height: 35px;
-    width: 35px;
+    height: 30px;
+    width: 30px;
     margin-right: 20px;
   }
 
@@ -96,6 +115,15 @@ export default {
     margin-bottom: 10px;
     height: 50%;
     top: 20%
+  }
+
+  .status {
+    float: right;
+  }
+
+  .button-box {
+    text-align: center;
+    margin-top: 30px
   }
 
 </style>

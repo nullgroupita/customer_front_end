@@ -18,9 +18,9 @@ export default {
   },
   mounted () {
     this.$store.dispatch('getCustomerData')
-    this.$store.commit('clearOrders')
-    this.$store.dispatch('getOrdersByStatus', 'false')
-    this.$store.dispatch('getOrdersByStatus', 'true')
+    // this.$store.commit('clearOrders')
+    // this.$store.dispatch('getOrdersByStatus', 'false')
+    // this.$store.dispatch('getOrdersByStatus', 'true')
   }
 }
 </script>
