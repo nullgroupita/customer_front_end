@@ -4,7 +4,8 @@ import {
   ADD_FINISHED_ORDERS,
   ADD_UN_FINISHED_ORDERS,
   CLEAR_ORDERS,
-  SET_CURRENT_ORDER
+  SET_CURRENT_ORDER,
+  UPDATE_TITLE
 } from '../common/constants/constants'
 
 const mutations = {
@@ -26,6 +27,9 @@ const mutations = {
   },
   [SET_CURRENT_ORDER] (state, data) {
     state.currentOrder = data
+  },
+  [UPDATE_TITLE] (state, title) {
+    state.title = title
   }
 }
 

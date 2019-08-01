@@ -51,26 +51,6 @@ const getCustomerData = () => {
     })
 }
 
-// const createOrder = params => {
-//   const url = store.state.customerId + '/orders'
-//   axios.post(url, params)
-//     .then(res => {
-//       if (res.retCode === 200) {
-//         Notify({
-//           message: '下单成功',
-//           duration: 1000,
-//           background: '#1989fa'
-//         })
-//         router.push('/list-order')
-//       } else {
-//         Notify('您有未完成的订单，无法下单')
-//       }
-//     })
-//     .catch(err => {
-//       console.log(err)
-//     })
-// }
-
 const createOrder = async params => {
   try {
     const url = store.state.customerId + '/orders'

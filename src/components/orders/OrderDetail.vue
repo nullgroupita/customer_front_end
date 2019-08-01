@@ -17,6 +17,7 @@
       <img src="../../assets/clock.png" />
       <span>{{getTime(order.fetchingTime)}}</span>
     </div>
+    <van-popup :overlay=false v-model="loading"><van-loading size='50px' v-if='loading' color="#1989fa">正在完成订单...</van-loading></van-popup>
     <div>
       <img src="../../assets/clock.png" />
       <span>{{getTime(order.parkingTime)}}</span>
@@ -58,7 +59,8 @@ export default {
       },
       order: '',
       buttonMessage: '完成订单',
-      disabled: false
+      disabled: false,
+      loading: false
     }
   },
   methods: {
@@ -75,19 +77,25 @@ export default {
       return this.STATUS_TYPE['' + status]
     },
     async finishOrder () {
+      this.loading = true
       const res = await api.finishOrder({
         ordersId: this.order.id,
         status: 7
       })
       if (res.retCode === 200) {
-        this.$notify('已完成订单')
-        this.$route.push('/list-order')
+        this.loading = false
+        this.$notify({
+          message: '已完成订单',
+          background: '#1989fa'
+        })
+        this.$router.push('/list-order')
       } else {
         this.$notify('网络错误')
       }
     }
   },
   mounted () {
+    this.$store.commit('updateTitle', '详情')
     this.order = this.$store.state.currentOrder
   }
 }

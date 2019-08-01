@@ -8,6 +8,9 @@ export default {
   data () {
     return {
     }
+  },
+  mounted () {
+    this.$store.commit('updateTitle', '我')
   }
 }
 </script>

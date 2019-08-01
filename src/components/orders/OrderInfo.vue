@@ -38,7 +38,7 @@ export default {
         6: '已还车',
         7: '完成'
       },
-      completed: 6
+      completed: 7
     }
   },
   props: {

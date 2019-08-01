@@ -4,18 +4,17 @@
       <van-field v-model='form.fetchPosition' required clearable label='地址' />
       <van-field required clearable label='停车时间' :placeholder='parkTimePlaceholder'
         @click='showParkTime=true; timeType=TIME_TYPE.PARK' />
-
-      <van-loading v-if='loading' color="#1989fa" />
+      <van-popup :overlay=false v-model="loading"><van-loading size='50px' v-if='loading' color="#1989fa">正在下单...</van-loading></van-popup>
 
       <van-field required clearable label='取车时间' :placeholder='fetchTimePlaceholder'
         @click='showFetchTime=true; timeType=TIME_TYPE.FETCH' />
 
       <van-popup v-model='showParkTime' round position='bottom' style='height: 50%'>
-        <van-datetime-picker @confirm='showTimeAndGetPrice' type='datetime' :min-date="parkMinDate" :max-date="maxDate"/>
+        <van-datetime-picker @confirm='showTimeAndGetPrice' type='datetime' :min-date="getParkMinDate" :max-date="getMaxDate"/>
       </van-popup>
 
       <van-popup v-model='showFetchTime' round position='bottom' style='height: 50%'>
-        <van-datetime-picker @confirm='showTimeAndGetPrice' type='datetime' :min-date="fetchMinDate" :max-date="maxDate"/>
+        <van-datetime-picker @confirm='showTimeAndGetPrice' type='datetime' :min-date="getFetchDate" :max-date="getMaxDate"/>
       </van-popup>
 
       <van-field v-model='username' required clearable label='联系人' />
@@ -29,9 +28,9 @@
       <span class='right'>节省</span>
     </div>
     <div class='price-box' v-if='this.form.price != -1'>
-      <span class='left'>{{otherParkingLotPrice}} 元</span>
-      <span>{{this.form.price}} 元</span>
-      <span class='right'>{{otherParkingLotPrice - this.form.price}} 元</span>
+      <span class='left'>{{otherParkingLotPrice.toFixed(2)}} 元</span>
+      <span>{{this.form.price.toFixed(2)}} 元</span>
+      <span class='right'>{{(otherParkingLotPrice - this.form.price).toFixed(2)}} 元</span>
     </div>
 
     <van-button type='info' @click='createOrder()' style='width: 60%; margin-top: 15px'>{{buttonMessage}}</van-button>
@@ -65,15 +64,26 @@ export default {
         FETCH: 1
       },
 
-      parkMinDate: new Date(),
-      fetchMinDate: new Date(moment().add(60, 'm').format('YYYY-MM-DD HH:MM:SS')),
-      maxDate: new Date(moment().add(1, 'M').format('YYYY-MM-DD HH:MM:SS')),
+      parkMinDate: '',
+      fetchMinDate: '',
+      maxDate: '',
 
       loading: false,
 
       buttonMessage: '下单',
 
       otherParkingLotPrice: ''
+    }
+  },
+  computed: {
+    getParkMinDate () {
+      return new Date()
+    },
+    getFetchDate () {
+      return new Date(moment().add(60, 'm').format('YYYY-MM-DD HH:MM:SS'))
+    },
+    getMaxDate () {
+      return new Date(moment().add(1, 'M').format('YYYY-MM-DD HH:MM:SS'))
     }
   },
   methods: {
@@ -97,8 +107,6 @@ export default {
       }
     },
     async getPrice () {
-      console.log(this.form.fetchingTime)
-      console.log(this.form.parkingTime)
       const res = await api.getPrice({
         parkingTime: this.form.parkingTime,
         fetchingTime: this.form.fetchingTime
@@ -111,7 +119,10 @@ export default {
       const res = await api.createOrder(this.form)
       this.loading = false
       if (res.retCode === 200) {
-        this.$notify('下单成功')
+        this.$notify({
+          message: '下单成功',
+          background: '#1989fa'
+        })
         this.$router.push('/list-order')
       } else {
         this.$notify('您有未完成的订单，无法下单')
@@ -119,9 +130,10 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('clearOrders')
-    this.$store.dispatch('getOrdersByStatus', 'false')
-    this.$store.dispatch('getOrdersByStatus', 'true')
+    this.$store.commit('updateTitle', '下单')
+    this.parkMinDate = new Date()
+    this.fetchMinDate = new Date(moment().add(60, 'm').format('YYYY-MM-DD HH:MM:SS'))
+    this.maxDate = new Date(moment().add(1, 'M').format('YYYY-MM-DD HH:MM:SS'))
   }
 }
 </script>
@@ -138,10 +150,12 @@ export default {
   }
 
   .left {
-    float: left
+    float: left;
+    width: 35%
   }
 
   .right {
-    float: right
+    float: right;
+    width: 35%
   }
 </style>

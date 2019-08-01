@@ -1,7 +1,9 @@
 <template>
   <div>
-      <van-loading v-if='loading' color="#1989fa" />
+    <van-pull-refresh v-model="loading" @refresh="refresh">
       <OrderInfo v-for="item in orders" :data="item" :key="item.id"/>
+    </van-pull-refresh>
+    <van-loading v-if='firstLoading' color="#1989fa" />
   </div>
 </template>
 
@@ -11,7 +13,8 @@ import api from '../../api'
 export default {
   data () {
     return {
-      loading: true,
+      firstLoading: true,
+      loading: false,
       orders: []
     }
   },
@@ -23,15 +26,23 @@ export default {
       const res = await api.getOrdersByStatus('true')
       const res2 = await api.getOrdersByStatus('false')
       if (res.retCode === 200 && res2.retCode === 200) {
+        this.orders.splice(0, this.orders.length)
         this.orders.push(...res2.data)
         this.orders.push(...res.data)
+        this.firstLoading = false
         this.loading = false
       } else {
         this.$notify('网络错误')
       }
+    },
+    refresh () {
+      this.$nextTick(function () {
+        this.getOrders()
+      })
     }
   },
   mounted: function () {
+    this.$store.commit('updateTitle', '列表')
     this.$nextTick(function () {
       this.getOrders()
     })

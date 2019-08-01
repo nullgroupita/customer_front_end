@@ -3,7 +3,8 @@ const state = {
   token: '',
   finishedOrder: [],
   unFinishOrder: [],
-  currentOrder: ''
+  currentOrder: '',
+  title: '下单'
 }
 
 export default state
